@@ -1,0 +1,52 @@
+@inherits Umbraco.Web.Mvc.UmbracoViewPage<IPublishedContent>
+@{
+    var components = Model.GetPropertyValue<IEnumerable<IPublishedContent>>("PageComponents");
+
+	if( components.Any() ) {
+
+		foreach(var item in components) {
+
+		    switch( item.DocumentTypeAlias ) {
+				case "Text":
+					@text( item )
+					break;
+				case "Gallery":
+					@gallery( item )
+					break;
+				case "Image":
+					@image( item )
+					break;
+				default:
+					<p>@item.DocumentTypeAlias</p>
+					break;
+		    }
+		}
+		
+	}
+
+}
+
+@helper text( IPublishedContent item ) {
+	@item.GetPropertyValue("Text")
+}
+
+@helper gallery( IPublishedContent item ) {
+	var selection = item.GetPropertyValue("Gallery").ToString().Split(',');
+
+	foreach( var id in selection ) {
+		var image = Umbraco.Media( id );
+		<img src="@image.Url?width=200&height=200&mode=crop" alt="@image.Name">
+	}
+}
+
+@helper image( IPublishedContent item ) {
+	var image = Umbraco.Media( item.GetPropertyValue("Image") );
+	<img src="@image.Url?width=800&height=200&mode=crop" alt="@image.Name">
+	<img src="" alt="@image.AltText" title="@image.Name">
+}
+
+
+
+
+
+
