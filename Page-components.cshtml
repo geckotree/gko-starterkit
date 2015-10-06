@@ -16,9 +16,6 @@
 				case "Image":
 					@image( item )
 					break;
-				case "Quote":
-					@quote( item )
-					break;
 				default:
 					<p>@item.DocumentTypeAlias</p>
 					break;
@@ -46,33 +43,16 @@
 }
 
 @helper image( IPublishedContent item ) {
-	var imageId = item.GetPropertyValue("Image");
+	var image = Umbraco.Media( item.GetPropertyValue("Image") );
 
-	if( imageId != null ) {
-		var image = Umbraco.Media( imageId );
-		string alignment = "o-media--" + Umbraco.GetPreValueAsString(item.GetPropertyValue<int>("Alignment")).ToLower();
-
-		<figure class="o-media @alignment">
-		    <img src="@image.Url?width=800&height=200&mode=crop" alt="@image.AltText" itemprop="image">
-		    @if( image.HasValue("Caption") ) {
-		    	<figcaption>@image.Caption</figcaption>
-		    }
-		</figure>
-
+	<img src="@image.Url?width=800&height=200&mode=crop" alt="@image.AltText">
+	@if( image.HasValue("Caption") ) {
+		<p>@image.Caption</p>
 	}
 }
 
 
-@helper quote( IPublishedContent item ) {
-	
-	<blockquote>
-		@item.GetPropertyValue("Quote")
-		@if( item.HasValue("Author") ) {
-			<footer>@item.GetPropertyValue("Author")</footer>
-		}
-	</blockquote>
 
-}
 
 
 
