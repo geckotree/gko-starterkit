@@ -49,13 +49,13 @@
 	var imageId = item.GetPropertyValue("Image");
 
 	if( imageId != null ) {
-		var image = Umbraco.Media( imageId );
+		var image = Umbraco.TypedMedia( imageId );
 		string alignment = "o-media--" + Umbraco.GetPreValueAsString(item.GetPropertyValue<int>("Alignment")).ToLower();
 
 		<figure class="o-media @alignment">
-		    <img src="@image.Url?width=800&height=200&mode=crop" alt="@image.AltText" itemprop="image">
+		    <img src="@image.Url?width=800&height=200&mode=crop" alt="@image.GetPropertyValue("AltText")" itemprop="image">
 		    @if( image.HasValue("Caption") ) {
-		    	<figcaption>@image.Caption</figcaption>
+		    	<figcaption>@image.GetPropertyValue("Caption")</figcaption>
 		    }
 		</figure>
 

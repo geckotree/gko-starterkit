@@ -59,9 +59,11 @@
 	<![endif]-->
 </head>
 <body class="c-page">
+	@Html.Partial("Page/Header")
 	<main class="c-page__content" role="main">
 		@RenderBody()
 	</main>
+	@Html.Partial("Page/Footer")
 	<script src="/assets/js/main.js"></script>
 	<!-- Google Analytics: change UA-XXXXX-X to be your site's ID -->
     <script>
