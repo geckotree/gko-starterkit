@@ -1,5 +1,7 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
-@{ 
+@{
+    Layout = "Master.cshtml";
+
     var homePage = CurrentPage.Site(); 
     var settings = homePage.FirstChild("Settings");
 }
