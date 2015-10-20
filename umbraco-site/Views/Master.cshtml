@@ -2,20 +2,25 @@
 @{
     Layout = null;
 
+//    var settings;
+
     string pageScope = "s-" + CurrentPage.DocumentTypeAlias.Replace(' ','-').ToLower();
+    string siteUrl = "http://" +  Request.Url.Host.ToString();
     string pageTitle = ( CurrentPage.HasValue("PageTitle") ? CurrentPage.PageTitle : CurrentPage.Name );
+    string pageUrl = siteUrl + CurrentPage.Url;
+    string socialImage = siteUrl + Umbraco.Media( ( CurrentPage.HasValue("SocialImage") ? CurrentPage.SocialImage : "settings.socialMediaImageDefault" ).ToString() ).Url;
 }
+
 <!doctype html>
 <!--[if lte IE 9]> <html lang="en" class="no-enhance no-js lt-ie10"> <![endif]-->
 <!--[if gt IE 9]><!--> <html lang="en" class="no-enhance no-js"> <!—<![endif]-->
 <head>
 	<meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="x-ua-compatible" content="ie=edge">
-
-	<title>@CurrentPage.Name</title>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="description" content="">
-
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>@pageTitle</title>
+	
 	<link rel="icon" href="/assets/img/brand-icons/favicon.png">
 
 	<!-- Add to homescreen for Chrome on Android -->
@@ -34,19 +39,23 @@
 	<meta name="msapplication-TileColor" content="#57B275">
 	<meta name="theme-color" content="#57B275">
 
+	@if( CurrentPage.HasValue("CanonicalLink") ) {
+		<link rel="canonical" href="@CurrentPage.Canonical">
+	}
+
 	<!-- Open graph - http://ogp.me -->
 	<meta property="og:title" content="@pageTitle" />
-	<meta property="og:description" content="" />
-	<meta property="og:url" content="" />
-	<meta property="og:image" content="/assets/build/img/brand-icons/chrome-touch-icon.png" />
+	<meta property="og:description" content="@pageUrl" />
+	<meta property="og:url" content="@pageTitle" />
+	<meta property="og:image" content="@socialImage" />
 
 	<!-- Twitter card - https://dev.twitter.com/docs/cards/markup-reference -->
-	<meta name="twitter:card" content="summary" />
+	<meta name="twitter:card" content="summary_large_image" />
 	<meta name="twitter:title" content="@pageTitle" />
 	<meta name="twitter:description" content="" />
-	<meta name="twitter:url" content="" />
-	<meta name="twitter:image" content="/assets/build/img/brand-icons/chrome-touch-icon.png" />
-	<meta name="twitter:site" content="" />
+	<meta name="twitter:url" content="@pageUrl" />
+	<meta name="twitter:image" content="@socialImage" />
+	<meta name="twitter:site" content="@pageTitle" />
 	<meta name="twitter:creator" content="" />
 
 	<!--[if gt IE 8]><!-->
