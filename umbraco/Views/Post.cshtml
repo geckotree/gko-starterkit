@@ -1,0 +1,48 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "Master.cshtml";
+
+	var page = CurrentPage;
+    string title = ( page.HasValue("Title") ? page.Title : page.Name );
+	var author = ( page.HasValue("Author") ? Umbraco.Content( page.Author ) : null );
+	var category = ( page.HasValue("Category") ? Umbraco.Content( page.Category ) : null );
+	DateTime releaseDate = page.ReleaseDate;
+}
+
+<article class="c-article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="o-wrap o-wrap--x-large">
+		<header class="c-article__header">
+			<h1 class="c-article__heading u-tera" itemprop="headline">@title</h1>
+
+			<ul class="c-listing__meta">
+				<li class="c-listing__meta__item">
+					<time datetime="{{ post.date | date: '%Y-%m-%d%T' }}" pubdate="pubdate">
+						@*
+						{% assign d = post.date | date: "%-d" %}
+						{% case d %}
+							{% when '1' or '21' or '31' %}{{ d }}<sup>st</sup>
+							{% when '2' or '22' %}{{ d }}<sup>nd</sup>
+							{% when '3' or '23' %}{{ d }}<sup>rd</sup>
+							{% else %}{{ d }}<sup>th</sup>
+						{% endcase %}
+						{{ post.date | date: "%b %Y" }}
+						*@
+					</time>
+					<meta itemprop="dateCreated" content="{{ post.date | date: '%Y-%m-%d' }}">
+				</li>
+				@if( category != null ) {
+					<li class="c-listing__meta__item" itemprop="author">@category.Name</li>
+				}
+				@if( author != null ) {
+					<li class="c-listing__meta__item" itemprop="author">@author.Name</li>
+				}
+			</ul>
+		</header>
+	</div>
+
+	<div class="o-wrap o-wrap--medium s-free-content" itemprop="articleBody">
+		<div class="c-article__excerpt">@page.Excerpt</div>
+
+		{{ content }}
+	</div>
+</article>

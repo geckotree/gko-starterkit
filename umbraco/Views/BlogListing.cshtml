@@ -1,0 +1,86 @@
+﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
+@{
+    Layout = "Master.cshtml";
+
+	var posts = CurrentPage.Site().FirstChild("Blog").FirstChild("BlogPosts");
+	dynamic allArticles;
+	
+	string docType = CurrentPage.DocumentTypeAlias;
+	
+	switch( docType ) {
+		case "Author":
+			allArticles = posts.Children("Post").Where("Visible && author.Contains(@0)", CurrentPage.Id.ToString() ).OrderBy("postDate desc");
+			break;
+		case "Category":
+			allArticles = posts.Children("Post").Where("Visible && category.Contains(@0)", CurrentPage.Id.ToString() ).OrderBy("postDate desc");
+			break;
+		default:
+			allArticles = posts.Children("Post").Where("Visible").OrderBy("releaseDate desc");
+			break;
+	}
+	
+	var postsCount = allArticles.Count();
+	var paging = Paging.GetPages( postsCount, 5 ); 
+	var selection = allArticles.Skip(paging.Skip).Take(paging.Take).ToList();
+	
+}
+
+<div class="o-section">
+	@if( selection.Any() ) {
+		<section class="c-listing-wrap">
+			@foreach( var item in selection ) {
+				string url = item.Url;
+				string title = ( item.HasValue("Title") ? item.Title : item.Name );
+				var author = ( item.HasValue("Author") ? Umbraco.Content( item.Author ) : null );
+				var category = ( item.HasValue("Category") ? Umbraco.Content( item.Category ) : null );
+				DateTime releaseDate = item.ReleaseDate;
+
+				<article class="o-wrap o-wrap--large c-listing" itemscope itemtype="http://schema.org/Blog">
+					<a href="@url" class="c-listing__link" itemprop="url">
+						<h2 class="c-listing__heading" itemprop="name">@title</h2>
+
+						<ul class="c-listing__meta">
+							<li class="c-listing__meta__item">
+								<time datetime="{{ post.date | date: '%Y-%m-%d%T' }}" pubdate="pubdate">
+									@*
+									{% assign d = post.date | date: "%-d" %}
+									{% case d %}
+										{% when '1' or '21' or '31' %}{{ d }}<sup>st</sup>
+										{% when '2' or '22' %}{{ d }}<sup>nd</sup>
+										{% when '3' or '23' %}{{ d }}<sup>rd</sup>
+										{% else %}{{ d }}<sup>th</sup>
+									{% endcase %}
+									{{ post.date | date: "%b %Y" }}
+									*@
+								</time>
+								<meta itemprop="dateCreated" content="{{ post.date | date: '%Y-%m-%d' }}">
+							</li>
+							@if( category != null ) {
+								<li class="c-listing__meta__item" itemprop="author">@category.Name</li>
+							}
+							@if( author != null ) {
+								<li class="c-listing__meta__item" itemprop="author">@author.Name</li>
+							}
+						</ul>
+
+						<div class="c-listing__copy">
+							@item.excerpt
+						</div>
+					</a>
+				</article>
+			}
+		</section>
+	} else {
+		<div class="o-wrap o-wrap--medium">
+			<p>Sorry, there are no posts</p>
+		</div>
+	}
+</div>
+
+@if( postsCount > 0 ) {
+	<nav class="c-pagination">
+		@PagingTemplate.RenderPaging(paging, CurrentPage.Id)
+	</nav>
+}
+
+
