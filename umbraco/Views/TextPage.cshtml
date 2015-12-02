@@ -1,6 +1,15 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
 @{
     Layout = "Master.cshtml";
+
+    var page = CurrentPage;
+    string title = ( page.HasValue("Title") ? page.Title : page.Name );
 }
 
-@Html.Partial("Components/Page-components")
+<article class="c-article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="o-wrap o-wrap--x-large">
+		<h1 class="c-article__heading u-tera" itemprop="headline">@title</h1>
+
+		@Html.Partial("Components/Page-components")
+	</div>
+</article>

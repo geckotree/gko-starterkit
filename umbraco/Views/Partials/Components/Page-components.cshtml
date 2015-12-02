@@ -2,7 +2,7 @@
 @{
     var components = Model.GetPropertyValue<IEnumerable<IPublishedContent>>("PageComponents");
 
-	if( components.Any() ) {
+	if( components != null ) {
 
 		foreach(var item in components) {
 

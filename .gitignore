@@ -40,5 +40,3 @@ Desktop.ini
 
 # Recycle Bin used on file shares
 $RECYCLE.BIN/
-
-umbraco/Views/Master.cshtml
