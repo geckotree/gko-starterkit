@@ -1,4 +1,22 @@
 ﻿@inherits Umbraco.Web.Mvc.UmbracoTemplatePage
 @{
     Layout = "Master.cshtml";
+
+    var selection = CurrentPage.Children().Where("Visible");
 }
+
+
+<article class="c-article" itemscope itemtype="http://schema.org/BlogPosting">
+	<div class="o-wrap o-wrap--x-large">
+		<h1 class="c-article__heading u-tera" itemprop="headline">@title</h1>
+		@if( selection.Any() ) {
+			<ul>
+				@foreach( var item in selection ) {
+					<li><a href="@item.Url">@item.Name</a></li>
+				}
+			</ul>
+		} else {
+			<p>Sorry, there are no pages in this section.</p>
+		}
+	</div>
+</article>
