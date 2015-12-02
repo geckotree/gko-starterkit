@@ -9,17 +9,17 @@
 	
 	switch( docType ) {
 		case "Author":
-			allArticles = posts.Children("Post").Where("Visible && author.Contains(@0)", CurrentPage.Id.ToString() ).OrderBy("postDate desc");
+			allArticles = posts.Children("Post").Where("Visible && author.Contains(@0)", CurrentPage.Id.ToString() ).OrderBy("releaseDate desc");
 			break;
 		case "Category":
-			allArticles = posts.Children("Post").Where("Visible && category.Contains(@0)", CurrentPage.Id.ToString() ).OrderBy("postDate desc");
+			allArticles = posts.Children("Post").Where("Visible && category.Contains(@0)", CurrentPage.Id.ToString() ).OrderBy("releaseDate desc");
 			break;
 		default:
 			allArticles = posts.Children("Post").Where("Visible").OrderBy("releaseDate desc");
 			break;
 	}
 	
-	var postsCount = allArticles.Count();
+	int postsCount = allArticles.Count();
 	var paging = Paging.GetPages( postsCount, 5 ); 
 	var selection = allArticles.Skip(paging.Skip).Take(paging.Take).ToList();
 	
@@ -52,8 +52,9 @@
 									{% endcase %}
 									{{ post.date | date: "%b %Y" }}
 									*@
+									@releaseDate.ToString("d MMM yyyy")
 								</time>
-								<meta itemprop="dateCreated" content="{{ post.date | date: '%Y-%m-%d' }}">
+								<meta itemprop="dateCreated" content="@releaseDate">
 							</li>
 							@if( category != null ) {
 								<li class="c-listing__meta__item" itemprop="author">@category.Name</li>

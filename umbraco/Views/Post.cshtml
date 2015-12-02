@@ -27,6 +27,7 @@
 						{% endcase %}
 						{{ post.date | date: "%b %Y" }}
 						*@
+						@releaseDate.ToString("d MMM yyyy")
 					</time>
 					<meta itemprop="dateCreated" content="{{ post.date | date: '%Y-%m-%d' }}">
 				</li>
@@ -42,7 +43,6 @@
 
 	<div class="o-wrap o-wrap--medium s-free-content" itemprop="articleBody">
 		<div class="c-article__excerpt">@page.Excerpt</div>
-
-		{{ content }}
+		@Html.Partial("Components/Page-components")
 	</div>
 </article>
