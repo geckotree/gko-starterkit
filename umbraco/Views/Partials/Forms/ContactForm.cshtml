@@ -198,7 +198,7 @@
 
 							@* show help text if exists *@
 							if (!string.IsNullOrEmpty(pt.Description)) {
-								<span class="help-block">@pt.Description</span>
+								<span class="o-label__note">@pt.Description</span>
 							}
 							if( IsPost ) {
 								@* Form validation moved *@
@@ -221,8 +221,8 @@
 			}
 
 		}
-		<div class="o-input-wrap">
-			<button type="submit" class="o-button o-button--primary o-button--submit">Submit</button>
+		<div class="o-form__field">
+			<button type="submit" class="c-button c-button--primary">Submit</button>
 		</div>
 	
 	</form>
